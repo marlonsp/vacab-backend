@@ -36,6 +36,25 @@ def api_palavra(request, palavra_id):
     serialized_palavra = PalavraSerializer(palavra)
     return Response(serialized_palavra.data)
 
+@api_view(['GET', 'POST', 'DELETE'])
+def api_palavras(request):
+    try:
+        all_palavras = Palavra.objects.all()
+    except Palavra.DoesNotExist:
+        raise Http404()
+
+    if request.method == 'POST':
+        new_palavra_data = request.data
+        new_palavra = Palavra(palavra = new_palavra_data['palavra'])
+        new_palavra.save()
+        all_palavras = Palavra.objects.all()
+    if request.method == 'DELETE':
+        all_palavras = Palavra.objects.all()
+        all_palavras.delete()
+
+    serialized_palavra = PalavraSerializer(all_palavras, many=True)
+    return Response(serialized_palavra.data)
+
 @api_view(['POST'])
 def api_get_token(request):
     try:
