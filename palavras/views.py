@@ -1,15 +1,13 @@
 from django.http import HttpResponse
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from django.http import Http404
+from django.http import Http404, HttpResponseForbidden, JsonResponse
 from .models import Palavra, PalavraUsuario
 from .serializers import PalavraSerializer
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from django.http import Http404, HttpResponseForbidden, JsonResponse
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
-
+from django.contrib.auth.models import User
 
 def index(request):
     return HttpResponse("Olá mundo! Este é o app vocab de Tecnologias Web do Insper.")
@@ -54,3 +52,20 @@ def api_get_token(request):
     except:
         return HttpResponseForbidden()
 
+
+@api_view(['POST'])
+def api_cadastro(request):
+    try:
+        if request.method == 'POST':
+            username = request.data['username']
+            password = request.data['password']
+            user = User.objects.create_user(username=username, password=password)
+            user = authenticate(username=username, password=password)
+
+            if user is not None:
+                token, created = Token.objects.get_or_create(user=user)
+                return JsonResponse({"token":token.key})
+            else:
+                return HttpResponseForbidden()
+    except:
+        return HttpResponseForbidden()
