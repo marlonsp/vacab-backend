@@ -6,3 +6,4 @@ class PalavraSerializer(serializers.ModelSerializer):
     class Meta:
         model = Palavra
         fields = ['id', 'palavra',]
+
