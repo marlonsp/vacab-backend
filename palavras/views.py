@@ -17,12 +17,6 @@ def api_palavra(request, palavra_id):
     try:
         if palavra_id == 'rand':
             palavra = Palavra.objects.order_by('?').first()
-            if PalavraUsuario.objects.filter(palavra=palavra).exists():
-                PalavraUsuario.objects.filter(palavra=palavra).add(request.user)
-            elif PalavraUsuario.objects.filter(user=request.user).exists():
-                PalavraUsuario.objects.filter(user=request.user).add(palavra=palavra)
-            else:
-                PalavraUsuario.objects.create(user=request.user, palavra=palavra)
         else:
             palavra = Palavra.objects.get(id=int(palavra_id))
     except Palavra.DoesNotExist:
