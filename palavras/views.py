@@ -19,10 +19,10 @@ def api_palavra(request, palavra_id):
             palavra = Palavra.objects.order_by('?').first()
             if PalavraUsuario.objects.filter(palavra=palavra).exists():
                 PalavraUsuario.objects.filter(palavra=palavra).add(request.user)
-            elif PalavraUsuario.objects.filter(usuario=request.user).exists():
-                PalavraUsuario.objects.filter(usuario=request.user).add(palavra=palavra)
+            elif PalavraUsuario.objects.filter(user=request.user).exists():
+                PalavraUsuario.objects.filter(user=request.user).add(palavra=palavra)
             else:
-                PalavraUsuario.objects.create(usuario=request.user, palavra=palavra)
+                PalavraUsuario.objects.create(user=request.user, palavra=palavra)
         else:
             palavra = Palavra.objects.get(id=int(palavra_id))
     except Palavra.DoesNotExist:

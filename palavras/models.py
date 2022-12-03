@@ -10,12 +10,10 @@ class Palavra(models.Model):
         return id+"."+palavra
 
 class PalavraUsuario(models.Model):
-    palavra = models.ForeignKey(Palavra, on_delete=models.CASCADE)
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    data = models.DateTimeField(auto_now_add=True)
-
+    palavra = models.CharField(max_length=5)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     def __str__(self):
         palavra = str(self.palavra)
         usuario = str(self.usuario)
-        data = str(self.data)
-        return palavra+"-"+usuario+"-"+data
+        return palavra+"-"+usuario
+    
